@@ -8,6 +8,8 @@ import com.proyecto1.customerservice.domain.exception.ClienteNotFoundException;
 import com.proyecto1.customerservice.domain.model.Cliente;
 import com.proyecto1.customerservice.infrastructure.messaging.ClienteEventPublisher;
 import com.proyecto1.customerservice.infrastructure.persistence.ClienteRepository;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +20,15 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final ClienteEventPublisher clienteEventPublisher;
+    private final PasswordEncoder passwordEncoder;
 
-    public ClienteService(ClienteRepository clienteRepository, ClienteEventPublisher clienteEventPublisher) {
+    public ClienteService(
+            ClienteRepository clienteRepository,
+            ClienteEventPublisher clienteEventPublisher,
+            PasswordEncoder passwordEncoder) {
         this.clienteRepository = clienteRepository;
         this.clienteEventPublisher = clienteEventPublisher;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -36,7 +43,7 @@ public class ClienteService {
                 request.getDireccion(),
                 request.getTelefono(),
                 request.getClienteId(),
-                request.getContrasena(),
+                passwordEncoder.encode(request.getContrasena()),
                 request.getEstado());
 
         Cliente clienteGuardado = clienteRepository.save(cliente);
@@ -73,7 +80,7 @@ public class ClienteService {
                 request.getIdentificacion(),
                 request.getDireccion(),
                 request.getTelefono(),
-                request.getContrasena(),
+                passwordEncoder.encode(request.getContrasena()),
                 request.getEstado());
 
         Cliente clienteActualizado = clienteRepository.save(cliente);
