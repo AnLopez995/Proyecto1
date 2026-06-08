@@ -1,0 +1,26 @@
+# Compilación de Java / Maven
+**/target/
+**.jar
+**.war
+
+# IDEs y Editores
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Sistema Operativo
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# Docker (si mapeas volúmenes de base de datos localmente)
+**/postgres_data/

@@ -1,0 +1,45 @@
+services:
+  customer-db:
+    image: postgres:16
+    container_name: customer-db
+    environment:
+      POSTGRES_DB: customer_db
+      POSTGRES_USER: customer_user
+      POSTGRES_PASSWORD: customer_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - customer_data:/var/lib/postgresql/data
+    networks:
+      - proyecto1-network
+
+  account-db:
+    image: postgres:16
+    container_name: account-db
+    environment:
+      POSTGRES_DB: account_db
+      POSTGRES_USER: account_user
+      POSTGRES_PASSWORD: account_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - account_data:/var/lib/postgresql/data
+    networks:
+      - proyecto1-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: banking-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - proyecto1-network
+
+volumes:
+  customer_data:
+  account_data:
+
+networks:
+  proyecto1-network:
+    driver: bridge
