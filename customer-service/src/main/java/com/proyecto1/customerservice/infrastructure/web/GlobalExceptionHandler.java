@@ -1,5 +1,6 @@
 package com.proyecto1.customerservice.infrastructure.web;
 
+import com.proyecto1.customerservice.application.dto.ErrorResponse;
 import com.proyecto1.customerservice.domain.exception.ClienteAlreadyExistsException;
 import com.proyecto1.customerservice.domain.exception.ClienteNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,11 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.amqp.AmqpException;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,108 +28,136 @@ public class GlobalExceptionHandler {
         private boolean includeDetails;
 
         @ExceptionHandler(ClienteNotFoundException.class)
-        @ResponseStatus(HttpStatus.NOT_FOUND)
-        public Map<String, Object> handleClienteNotFound(
+        public ResponseEntity<ErrorResponse> handleClienteNotFound(
                         ClienteNotFoundException exception,
                         HttpServletRequest request) {
                 LOGGER.warn("Cliente no encontrado: {}", exception.getMessage());
 
-                return buildErrorResponse(
-                                HttpStatus.NOT_FOUND,
+                HttpStatus status = HttpStatus.NOT_FOUND;
+
+                ErrorResponse response = ErrorResponse.of(
+                                status.value(),
+                                status.getReasonPhrase(),
                                 exception.getMessage(),
                                 request.getRequestURI(),
-                                exception);
+                                buildDetails(exception));
+
+                return ResponseEntity.status(status).body(response);
         }
 
         @ExceptionHandler(ClienteAlreadyExistsException.class)
-        @ResponseStatus(HttpStatus.CONFLICT)
-        public Map<String, Object> handleClienteAlreadyExists(
+        public ResponseEntity<ErrorResponse> handleClienteAlreadyExists(
                         ClienteAlreadyExistsException exception,
                         HttpServletRequest request) {
                 LOGGER.warn("Cliente duplicado: {}", exception.getMessage());
 
-                return buildErrorResponse(
-                                HttpStatus.CONFLICT,
+                HttpStatus status = HttpStatus.CONFLICT;
+
+                ErrorResponse response = ErrorResponse.of(
+                                status.value(),
+                                status.getReasonPhrase(),
                                 exception.getMessage(),
                                 request.getRequestURI(),
-                                exception);
-        }
+                                buildDetails(exception));
 
-        @ExceptionHandler(DataIntegrityViolationException.class)
-        @ResponseStatus(HttpStatus.CONFLICT)
-        public Map<String, Object> handleDataIntegrityViolation(
-                        DataIntegrityViolationException exception,
-                        HttpServletRequest request) {
-                LOGGER.error("Error de integridad de datos", exception);
-
-                return buildErrorResponse(
-                                HttpStatus.CONFLICT,
-                                "Error de integridad de datos. Verifica campos únicos u obligatorios.",
-                                request.getRequestURI(),
-                                exception);
+                return ResponseEntity.status(status).body(response);
         }
 
         @ExceptionHandler(MethodArgumentNotValidException.class)
-        @ResponseStatus(HttpStatus.BAD_REQUEST)
-        public Map<String, Object> handleValidationException(
+        public ResponseEntity<ErrorResponse> handleValidationException(
                         MethodArgumentNotValidException exception,
                         HttpServletRequest request) {
                 LOGGER.warn("Error de validación en request: {}", exception.getMessage());
 
-                Map<String, String> validationErrors = new HashMap<>();
+                HttpStatus status = HttpStatus.BAD_REQUEST;
+
+                Map<String, Object> validationErrors = new HashMap<>();
 
                 for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
                         validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
                 }
 
-                Map<String, Object> response = buildErrorResponse(
-                                HttpStatus.BAD_REQUEST,
+                ErrorResponse response = ErrorResponse.of(
+                                status.value(),
+                                status.getReasonPhrase(),
                                 "Error de validación",
                                 request.getRequestURI(),
-                                exception);
+                                validationErrors);
 
-                response.put("validationErrors", validationErrors);
-                return response;
+                return ResponseEntity.status(status).body(response);
+        }
+
+        @ExceptionHandler(DataIntegrityViolationException.class)
+        public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(
+                        DataIntegrityViolationException exception,
+                        HttpServletRequest request) {
+                LOGGER.error("Error de integridad de datos", exception);
+
+                HttpStatus status = HttpStatus.CONFLICT;
+
+                ErrorResponse response = ErrorResponse.of(
+                                status.value(),
+                                status.getReasonPhrase(),
+                                "Error de integridad de datos. Verifica campos únicos u obligatorios.",
+                                request.getRequestURI(),
+                                buildDetails(exception));
+
+                return ResponseEntity.status(status).body(response);
+        }
+
+        @ExceptionHandler(AmqpException.class)
+        public ResponseEntity<ErrorResponse> handleAmqpException(
+                        AmqpException exception,
+                        HttpServletRequest request) {
+                LOGGER.error("Error de comunicación con RabbitMQ", exception);
+
+                HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
+
+                ErrorResponse response = ErrorResponse.of(
+                                status.value(),
+                                status.getReasonPhrase(),
+                                "No fue posible publicar el evento en RabbitMQ.",
+                                request.getRequestURI(),
+                                buildDetails(exception));
+
+                return ResponseEntity.status(status).body(response);
         }
 
         @ExceptionHandler(Exception.class)
-        @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-        public Map<String, Object> handleGeneralException(
+        public ResponseEntity<ErrorResponse> handleGeneralException(
                         Exception exception,
                         HttpServletRequest request) {
                 LOGGER.error("Error inesperado en la petición {}", request.getRequestURI(), exception);
 
-                return buildErrorResponse(
-                                HttpStatus.INTERNAL_SERVER_ERROR,
+                HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+                ErrorResponse response = ErrorResponse.of(
+                                status.value(),
+                                status.getReasonPhrase(),
                                 "Error interno del servidor",
                                 request.getRequestURI(),
-                                exception);
+                                buildDetails(exception));
+
+                return ResponseEntity.status(status).body(response);
         }
 
-        private Map<String, Object> buildErrorResponse(
-                        HttpStatus status,
-                        String message,
-                        String path,
-                        Exception exception) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("timestamp", LocalDateTime.now());
-                response.put("status", status.value());
-                response.put("error", status.getReasonPhrase());
-                response.put("message", message);
-                response.put("path", path);
-
-                if (includeDetails && exception != null) {
-                        response.put("exception", exception.getClass().getName());
-                        response.put("detail", exception.getMessage());
-
-                        Throwable rootCause = getRootCause(exception);
-                        if (rootCause != null && rootCause != exception) {
-                                response.put("rootCause", rootCause.getClass().getName());
-                                response.put("rootCauseMessage", rootCause.getMessage());
-                        }
+        private Map<String, Object> buildDetails(Exception exception) {
+                if (!includeDetails || exception == null) {
+                        return null;
                 }
 
-                return response;
+                Map<String, Object> details = new HashMap<>();
+                details.put("exception", exception.getClass().getName());
+                details.put("detail", exception.getMessage());
+
+                Throwable rootCause = getRootCause(exception);
+
+                if (rootCause != null && rootCause != exception) {
+                        details.put("rootCause", rootCause.getClass().getName());
+                        details.put("rootCauseMessage", rootCause.getMessage());
+                }
+
+                return details;
         }
 
         private Throwable getRootCause(Throwable throwable) {
