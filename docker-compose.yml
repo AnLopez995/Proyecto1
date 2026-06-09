@@ -10,8 +10,14 @@ services:
       - "5433:5432"
     volumes:
       - customer_data:/var/lib/postgresql/data
+      - ./database/customer-db:/docker-entrypoint-initdb.d
     networks:
       - proyecto1-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U customer_user -d customer_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   account-db:
     image: postgres:16
@@ -24,8 +30,14 @@ services:
       - "5434:5432"
     volumes:
       - account_data:/var/lib/postgresql/data
+      - ./database/account-db:/docker-entrypoint-initdb.d
     networks:
       - proyecto1-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U account_user -d account_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -35,6 +47,78 @@ services:
       - "15672:15672"
     networks:
       - proyecto1-network
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    container_name: customer-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/customer_db
+      SPRING_DATASOURCE_USERNAME: customer_user
+      SPRING_DATASOURCE_PASSWORD: customer_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      APP_ERRORS_INCLUDE_DETAILS: "true"
+    depends_on:
+      customer-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - proyecto1-network
+
+  account-service:
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    container_name: account-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://account-db:5432/account_db
+      SPRING_DATASOURCE_USERNAME: account_user
+      SPRING_DATASOURCE_PASSWORD: account_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      APP_ERRORS_INCLUDE_DETAILS: "true"
+    depends_on:
+      account-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      customer-service:
+        condition: service_started
+    networks:
+      - proyecto1-network
+
+  seed-data:
+    image: curlimages/curl:8.10.1
+    container_name: proyecto1-seed-data
+    volumes:
+      - ./scripts/seed-data.sh:/seed-data.sh
+    command: [ "sh", "/seed-data.sh" ]
+    depends_on:
+      customer-service:
+        condition: service_started
+      account-service:
+        condition: service_started
+    networks:
+      - proyecto1-network
+    restart: "no"
 
 volumes:
   customer_data:
