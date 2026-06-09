@@ -1,11 +1,13 @@
 package com.proyecto1.customerservice.infrastructure.web;
 
+import com.proyecto1.customerservice.application.dto.ApiResponse;
 import com.proyecto1.customerservice.application.dto.ClienteRequest;
 import com.proyecto1.customerservice.application.dto.ClienteResponse;
 import com.proyecto1.customerservice.application.dto.EstadoClienteRequest;
 import com.proyecto1.customerservice.application.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,38 +23,75 @@ public class ClienteController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ClienteResponse crearCliente(@Valid @RequestBody ClienteRequest request) {
-        return clienteService.crearCliente(request);
+    public ResponseEntity<ApiResponse<ClienteResponse>> crearCliente(
+            @Valid @RequestBody ClienteRequest request) {
+        ClienteResponse cliente = clienteService.crearCliente(request);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(
+                        HttpStatus.CREATED.value(),
+                        "Cliente creado exitosamente",
+                        cliente));
     }
 
     @GetMapping
-    public List<ClienteResponse> listarClientes() {
-        return clienteService.listarClientes();
+    public ResponseEntity<ApiResponse<List<ClienteResponse>>> listarClientes() {
+        List<ClienteResponse> clientes = clienteService.listarClientes();
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        HttpStatus.OK.value(),
+                        "Clientes consultados exitosamente",
+                        clientes));
     }
 
     @GetMapping("/{id}")
-    public ClienteResponse obtenerClientePorId(@PathVariable Long id) {
-        return clienteService.obtenerClientePorId(id);
+    public ResponseEntity<ApiResponse<ClienteResponse>> obtenerClientePorId(
+            @PathVariable Long id) {
+        ClienteResponse cliente = clienteService.obtenerClientePorId(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        HttpStatus.OK.value(),
+                        "Cliente consultado exitosamente",
+                        cliente));
     }
 
     @PutMapping("/{id}")
-    public ClienteResponse actualizarCliente(
+    public ResponseEntity<ApiResponse<ClienteResponse>> actualizarCliente(
             @PathVariable Long id,
             @Valid @RequestBody ClienteRequest request) {
-        return clienteService.actualizarCliente(id, request);
+        ClienteResponse cliente = clienteService.actualizarCliente(id, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        HttpStatus.OK.value(),
+                        "Cliente actualizado exitosamente",
+                        cliente));
     }
 
     @PatchMapping("/{id}/estado")
-    public ClienteResponse actualizarEstado(
+    public ResponseEntity<ApiResponse<ClienteResponse>> actualizarEstado(
             @PathVariable Long id,
             @Valid @RequestBody EstadoClienteRequest request) {
-        return clienteService.actualizarEstado(id, request);
+        ClienteResponse cliente = clienteService.actualizarEstado(id, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        HttpStatus.OK.value(),
+                        "Estado del cliente actualizado exitosamente",
+                        cliente));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminarCliente(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> eliminarCliente(@PathVariable Long id) {
         clienteService.eliminarCliente(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        HttpStatus.OK.value(),
+                        "Cliente eliminado exitosamente",
+                        null));
     }
 }
