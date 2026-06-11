@@ -1,0 +1,746 @@
+{
+  "info": {
+    "_postman_id": "4a8f3ca1-9ad0-452e-9b90-92f404a0dfb4",
+    "name": "account-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18882680"
+  },
+  "item": [
+    {
+      "name": "cuentas",
+      "item": [
+        {
+          "name": "Crear Cuenta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"numeroCuenta\": \"999999\",\r\n  \"tipoCuenta\": \"Ahorros\",\r\n  \"saldoInicial\": 500.00,\r\n  \"estado\": true,\r\n  \"clienteId\": 999\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/api/cuentas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "cuentas"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Cuenta Creada Exitosamente",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"495878\",\r\n  \"tipoCuenta\": \"Ahorros\",\r\n  \"saldoInicial\": 0.00,\r\n  \"estado\": true,\r\n  \"clienteId\": 9\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/cuentas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "cuentas"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:12:18 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:12:18.7528361\",\n    \"status\": 201,\n    \"message\": \"Cuenta creada exitosamente\",\n    \"data\": {\n        \"id\": 3,\n        \"numeroCuenta\": \"495878\",\n        \"tipoCuenta\": \"Ahorros\",\n        \"saldoInicial\": 0,\n        \"saldoDisponible\": 0,\n        \"estado\": true,\n        \"clienteId\": 9\n    }\n}"
+            },
+            {
+              "name": "Cliente no encontrado",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"999999\",\r\n  \"tipoCuenta\": \"Ahorros\",\r\n  \"saldoInicial\": 500.00,\r\n  \"estado\": true,\r\n  \"clienteId\": 999\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/cuentas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "cuentas"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:15:25 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:15:25.0591394\",\n    \"status\": 404,\n    \"error\": \"Not Found\",\n    \"message\": \"Cliente no encontrado en account-service con id: 999\",\n    \"path\": \"/api/cuentas\",\n    \"details\": {\n        \"exception\": \"com.proyecto1.accountservice.domain.exception.ClienteNotFoundException\",\n        \"detail\": \"Cliente no encontrado en account-service con id: 999\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/api/cuentas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "cuentas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambio Estado Cuenta",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"estado\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/api/cuentas/1/estado",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "cuentas",
+                "1",
+                "estado"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulta Cuenta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/api/cuentas/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "cuentas",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Movimientos",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"numeroCuenta\": \"478758\",\r\n  \"valor\": 200\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/api/movimientos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "movimientos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Retiro Exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"478758\",\r\n  \"valor\": -575.00\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/movimientos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:41:01 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:41:01.0044825\",\n    \"status\": 201,\n    \"message\": \"Movimiento registrado exitosamente\",\n    \"data\": {\n        \"id\": 1,\n        \"fecha\": \"2026-06-09T15:41:00.9855624\",\n        \"tipoMovimiento\": \"RETIRO\",\n        \"valor\": -575,\n        \"saldo\": 1425,\n        \"numeroCuenta\": \"478758\"\n    }\n}"
+            },
+            {
+              "name": "Saldo no disponible",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"478758\",\r\n  \"valor\": -100000.00\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/movimientos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:41:47 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:41:47.6840834\",\n    \"status\": 400,\n    \"error\": \"Bad Request\",\n    \"message\": \"Saldo no disponible\",\n    \"path\": \"/api/movimientos\",\n    \"details\": {\n        \"exception\": \"com.proyecto1.accountservice.domain.exception.InsufficientBalanceException\",\n        \"detail\": \"Saldo no disponible\"\n    }\n}"
+            },
+            {
+              "name": "Deposito Exitoso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"478758\",\r\n  \"valor\": 600.00\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/movimientos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:42:50 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:42:50.4236261\",\n    \"status\": 201,\n    \"message\": \"Movimiento registrado exitosamente\",\n    \"data\": {\n        \"id\": 2,\n        \"fecha\": \"2026-06-09T15:42:50.4147322\",\n        \"tipoMovimiento\": \"DEPOSITO\",\n        \"valor\": 600,\n        \"saldo\": 2025,\n        \"numeroCuenta\": \"478758\"\n    }\n}"
+            },
+            {
+              "name": "Cuenta No encontrada",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"4787500\",\r\n  \"valor\": 600.00\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/movimientos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:43:15 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:43:15.5228835\",\n    \"status\": 404,\n    \"error\": \"Not Found\",\n    \"message\": \"Cuenta no encontrada con número: 4787500\",\n    \"path\": \"/api/movimientos\",\n    \"details\": {\n        \"exception\": \"com.proyecto1.accountservice.domain.exception.CuentaNotFoundException\",\n        \"detail\": \"Cuenta no encontrada con número: 4787500\"\n    }\n}"
+            },
+            {
+              "name": "Valor 0",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"478758\",\r\n  \"valor\": 0\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/movimientos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:45:42 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:45:42.8431248\",\n    \"status\": 400,\n    \"error\": \"Bad Request\",\n    \"message\": \"El valor del movimiento debe ser diferente de cero\",\n    \"path\": \"/api/movimientos\",\n    \"details\": {\n        \"exception\": \"com.proyecto1.accountservice.domain.exception.InvalidMovementValueException\",\n        \"detail\": \"El valor del movimiento debe ser diferente de cero\"\n    }\n}"
+            },
+            {
+              "name": "Cuenta Inactiva",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"478758\",\r\n  \"valor\": 200\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8082/api/movimientos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:46:20 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:46:20.6528066\",\n    \"status\": 400,\n    \"error\": \"Bad Request\",\n    \"message\": \"La cuenta 478758 se encuentra inactiva\",\n    \"path\": \"/api/movimientos\",\n    \"details\": {\n        \"exception\": \"com.proyecto1.accountservice.domain.exception.InactiveAccountException\",\n        \"detail\": \"La cuenta 478758 se encuentra inactiva\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Estado De cuenta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/api/reportes?clienteId=1&fechaInicio=2026-06-01&fechaFin=2026-06-30",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "api",
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "clienteId",
+                  "value": "1"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "2026-06-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2026-06-30"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Consulta Exitosa",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8082/api/reportes?clienteId=5&fechaInicio=2026-06-01&fechaFin=2026-06-30",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "clienteId",
+                      "value": "5"
+                    },
+                    {
+                      "key": "fechaInicio",
+                      "value": "2026-06-01"
+                    },
+                    {
+                      "key": "fechaFin",
+                      "value": "2026-06-30"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:53:30 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:53:30.511606\",\n    \"status\": 200,\n    \"message\": \"Reporte generado exitosamente\",\n    \"data\": {\n        \"clienteId\": 5,\n        \"codigoCliente\": \"CLI-001\",\n        \"nombre\": \"Jose Lema\",\n        \"identificacion\": \"1234567890\",\n        \"estadoCliente\": true,\n        \"cuentas\": [\n            {\n                \"numeroCuenta\": \"478758\",\n                \"tipoCuenta\": \"Ahorros\",\n                \"saldoInicial\": 2000,\n                \"saldoDisponible\": 2025,\n                \"estado\": false,\n                \"movimientos\": [\n                    {\n                        \"fecha\": \"2026-06-09T15:41:00.985562\",\n                        \"tipoMovimiento\": \"RETIRO\",\n                        \"valor\": -575,\n                        \"saldo\": 1425\n                    },\n                    {\n                        \"fecha\": \"2026-06-09T15:42:50.414732\",\n                        \"tipoMovimiento\": \"DEPOSITO\",\n                        \"valor\": 600,\n                        \"saldo\": 2025\n                    }\n                ]\n            }\n        ]\n    }\n}"
+            },
+            {
+              "name": "Cliente no encontrado",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8082/api/reportes?clienteId=7&fechaInicio=2026-06-01&fechaFin=2026-06-30",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8082",
+                  "path": [
+                    "api",
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "clienteId",
+                      "value": "7"
+                    },
+                    {
+                      "key": "fechaInicio",
+                      "value": "2026-06-01"
+                    },
+                    {
+                      "key": "fechaFin",
+                      "value": "2026-06-30"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 09 Jun 2026 20:54:06 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"timestamp\": \"2026-06-09T15:54:06.8510888\",\n    \"status\": 404,\n    \"error\": \"Not Found\",\n    \"message\": \"Cliente no encontrado en account-service con id: 7\",\n    \"path\": \"/api/reportes\",\n    \"details\": {\n        \"exception\": \"com.proyecto1.accountservice.domain.exception.ClienteNotFoundException\",\n        \"detail\": \"Cliente no encontrado en account-service con id: 7\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
