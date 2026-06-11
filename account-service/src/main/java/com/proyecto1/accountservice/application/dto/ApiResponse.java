@@ -1,6 +1,7 @@
 package com.proyecto1.accountservice.application.dto;
 
 import java.time.LocalDateTime;
+import com.proyecto1.accountservice.shared.config.AppTime;
 
 public class ApiResponse<T> {
 
@@ -20,7 +21,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> success(int status, String message, T data) {
-        return new ApiResponse<>(LocalDateTime.now(), status, message, data);
+        return new ApiResponse<>(AppTime.now(), status, message, data);
     }
 
     public LocalDateTime getTimestamp() {

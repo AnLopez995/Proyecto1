@@ -143,7 +143,7 @@ public class GlobalExceptionHandler {
 
         private Map<String, Object> buildDetails(Exception exception) {
                 if (!includeDetails || exception == null) {
-                        return null;
+                        return Map.of();
                 }
 
                 Map<String, Object> details = new HashMap<>();

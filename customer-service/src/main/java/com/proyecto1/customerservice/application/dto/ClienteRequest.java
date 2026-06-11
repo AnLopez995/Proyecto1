@@ -39,6 +39,8 @@ public class ClienteRequest {
     private Boolean estado;
 
     public ClienteRequest() {
+        // Constructor requerido por Jackson para deserializar el cuerpo JSON de la
+        // petición.
     }
 
     public String getNombre() {

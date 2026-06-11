@@ -2,6 +2,7 @@ package com.proyecto1.accountservice.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import com.proyecto1.accountservice.shared.config.AppTime;
 
 public class ErrorResponse {
 
@@ -37,7 +38,7 @@ public class ErrorResponse {
             String path,
             Map<String, Object> details) {
         return new ErrorResponse(
-                LocalDateTime.now(),
+                AppTime.now(),
                 status,
                 error,
                 message,

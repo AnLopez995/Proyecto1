@@ -13,6 +13,8 @@ public class ClienteResponse {
     private Boolean estado;
 
     public ClienteResponse() {
+        // Constructor requerido por Jackson para deserializar el cuerpo JSON de la
+        // petición.
     }
 
     public ClienteResponse(

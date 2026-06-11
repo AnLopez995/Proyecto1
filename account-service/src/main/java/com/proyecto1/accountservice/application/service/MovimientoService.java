@@ -10,6 +10,7 @@ import com.proyecto1.accountservice.domain.model.Cuenta;
 import com.proyecto1.accountservice.domain.model.Movimiento;
 import com.proyecto1.accountservice.infrastructure.persistence.CuentaRepository;
 import com.proyecto1.accountservice.infrastructure.persistence.MovimientoRepository;
+import com.proyecto1.accountservice.shared.config.AppTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +62,7 @@ public class MovimientoService {
         }
 
         Movimiento movimiento = new Movimiento(
-                LocalDateTime.now(),
+                AppTime.now(),
                 tipoMovimiento,
                 valor,
                 nuevoSaldo,
